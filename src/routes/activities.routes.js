@@ -4,7 +4,14 @@ const { Activity, Country } = require('../db.js');
 const router = Router();
 
 router.get('/', async (req, res) => {
-  const activities = await Activity.findAll();
+  const activities = await Activity.findAll({
+    include: {
+      model: Country,
+      through: {
+        attributes: [],
+      },
+    },
+  });
   res.json(activities);
 });
 
@@ -16,7 +23,6 @@ router.post('/', async (req, res) => {
     duration,
     season,
   });
-  
 
   idCountries.forEach(async (id) => {
     const country = await Country.findByPk(id);
